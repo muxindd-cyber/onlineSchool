@@ -1,15 +1,28 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { copyFileSync, existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 
-// base: '/' — правильно для кастомного домена (onlineschoolznayka.ru)
-// При base:'/' → BASE_URL='/' → BrowserRouter получает basename=undefined → маршрутизация работает
-// При base:'./' → BASE_URL='./' → BrowserRouter получает basename='.' → маршрутизация сломана!
+// GitHub Pages: VITE_BASE_PATH передается из GitHub Actions.
+const base = process.env.VITE_BASE_PATH || '/'
+
 export default defineConfig({
-  base: '/',
+  base,
   plugins: [
     react(),
     tailwindcss(),
+    {
+      name: 'github-pages-spa',
+      closeBundle() {
+        const distDir = resolve('dist')
+        const index = resolve(distDir, 'index.html')
+        // Копируем index.html в 404.html, чтобы работал React Router на GitHub Pages
+        if (existsSync(index)) {
+          copyFileSync(index, resolve(distDir, '404.html'))
+        }
+      },
+    },
   ],
   build: {
     outDir: 'dist',
