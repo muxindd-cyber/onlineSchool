@@ -63,32 +63,30 @@ function AppContent() {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-indigo-600/30 selection:text-indigo-600 relative overflow-x-hidden">
-      <div className="absolute top-0 inset-x-0 h-64 bg-gradient-to-b from-indigo-600/5 to-transparent pointer-events-none" aria-hidden="true" />
-
-      <nav className="fixed w-full z-50 top-0 bg-white/85 backdrop-blur-xl border-b border-indigo-100/60 shadow-sm transition-all">
+    <div className="min-h-screen bg-brand-50 text-neutral-900 selection:bg-brand-400/40 selection:text-brand-800 relative overflow-x-hidden">
+      <nav className="fixed w-full z-50 top-0 bg-brand-50/90 backdrop-blur-xl border-b border-neutral-200/80 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
           <button
             type="button"
-            className="font-bold text-xl sm:text-2xl tracking-wide text-indigo-700 cursor-pointer text-left shrink-0"
+            className="font-serif font-bold text-xl sm:text-2xl tracking-wide text-neutral-900 cursor-pointer text-left shrink-0"
             onClick={handleLogoClick}
           >
-            Я уже <span className="text-indigo-500">все знаю</span>
+            Я уже <span className="text-brand-600">все знаю</span>
           </button>
 
           <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600 items-center">
             {isLanding && (
               <>
-                <button type="button" onClick={() => scrollToAnchor('trust')} className="hover:text-indigo-600 transition-colors">
+                <button type="button" onClick={() => scrollToAnchor('trust')} className="hover:text-brand-600 transition-colors">
                   Преимущества
                 </button>
-                <button type="button" onClick={() => scrollToAnchor('services')} className="hover:text-indigo-600 transition-colors">
+                <button type="button" onClick={() => scrollToAnchor('services')} className="hover:text-brand-600 transition-colors">
                   Программы
                 </button>
-                <button type="button" onClick={() => scrollToAnchor('team')} className="hover:text-indigo-600 transition-colors">
+                <button type="button" onClick={() => scrollToAnchor('team')} className="hover:text-brand-600 transition-colors">
                   Эксперты
                 </button>
-                <button type="button" onClick={() => scrollToAnchor('testimonials')} className="hover:text-indigo-600 transition-colors">
+                <button type="button" onClick={() => scrollToAnchor('testimonials')} className="hover:text-brand-600 transition-colors">
                   Отзывы
                 </button>
               </>
@@ -96,14 +94,14 @@ function AppContent() {
             <button
               type="button"
               onClick={() => goToCabinet('/cabinet/subjects')}
-              className={`hover:text-indigo-600 transition-colors ${location.pathname.includes('subjects') ? 'text-indigo-600' : ''}`}
+              className={`hover:text-brand-600 transition-colors ${location.pathname.includes('subjects') ? 'text-brand-600' : ''}`}
             >
               Предметы
             </button>
             <button
               type="button"
               onClick={() => goToCabinet('/cabinet/dashboard')}
-              className={`hover:text-indigo-600 transition-colors ${location.pathname.includes('dashboard') ? 'text-indigo-600' : ''}`}
+              className={`hover:text-brand-600 transition-colors ${location.pathname.includes('dashboard') ? 'text-brand-600' : ''}`}
             >
               Личный кабинет
             </button>
@@ -141,7 +139,7 @@ function AppContent() {
               <button
                 type="button"
                 onClick={() => openAuth('/cabinet/dashboard')}
-                className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200 hover:shadow-lg hover:-translate-y-0.5"
+                className="btn-primary text-sm !py-2.5 !px-6"
               >
                 Войти
               </button>
@@ -150,7 +148,7 @@ function AppContent() {
 
           <button
             type="button"
-            className="md:hidden text-slate-600 hover:text-indigo-600 p-2 -mr-2"
+            className="md:hidden text-slate-600 hover:text-brand-600 p-2 -mr-2"
             aria-label={mobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen((v) => !v)}
@@ -160,32 +158,32 @@ function AppContent() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200/60 bg-white/95 backdrop-blur-xl px-4 py-4 max-h-[calc(100dvh-4rem)] overflow-y-auto">
+          <div className="md:hidden border-t border-neutral-200/80 bg-brand-50/98 backdrop-blur-xl px-4 py-4 max-h-[calc(100dvh-4rem)] overflow-y-auto">
             <div className="flex flex-col gap-1 text-sm font-medium">
               {isLanding && (
                 <>
-                  <button type="button" onClick={() => scrollToAnchor('trust')} className="text-left py-3 text-slate-700 hover:text-indigo-600">
+                  <button type="button" onClick={() => scrollToAnchor('trust')} className="text-left py-3 text-slate-700 hover:text-brand-600">
                     Преимущества
                   </button>
-                  <button type="button" onClick={() => scrollToAnchor('services')} className="text-left py-3 text-slate-700 hover:text-indigo-600">
+                  <button type="button" onClick={() => scrollToAnchor('services')} className="text-left py-3 text-slate-700 hover:text-brand-600">
                     Программы
                   </button>
-                  <button type="button" onClick={() => scrollToAnchor('team')} className="text-left py-3 text-slate-700 hover:text-indigo-600">
+                  <button type="button" onClick={() => scrollToAnchor('team')} className="text-left py-3 text-slate-700 hover:text-brand-600">
                     Эксперты
                   </button>
-                  <button type="button" onClick={() => scrollToAnchor('testimonials')} className="text-left py-3 text-slate-700 hover:text-indigo-600">
+                  <button type="button" onClick={() => scrollToAnchor('testimonials')} className="text-left py-3 text-slate-700 hover:text-brand-600">
                     Отзывы
                   </button>
-                  <button type="button" onClick={() => scrollToAnchor('booking')} className="text-left py-3 text-indigo-600 font-semibold">
+                  <button type="button" onClick={() => scrollToAnchor('booking')} className="text-left py-3 text-brand-600 font-semibold">
                     Записаться на диагностику
                   </button>
                   <hr className="border-slate-100 my-2" />
                 </>
               )}
-              <button type="button" onClick={() => goToCabinet('/cabinet/subjects')} className="text-left py-3 text-slate-700 hover:text-indigo-600">
+              <button type="button" onClick={() => goToCabinet('/cabinet/subjects')} className="text-left py-3 text-slate-700 hover:text-brand-600">
                 Предметы
               </button>
-              <button type="button" onClick={() => goToCabinet('/cabinet/dashboard')} className="text-left py-3 text-slate-700 hover:text-indigo-600">
+              <button type="button" onClick={() => goToCabinet('/cabinet/dashboard')} className="text-left py-3 text-slate-700 hover:text-brand-600">
                 Личный кабинет
               </button>
               <hr className="border-slate-100 my-2" />
@@ -250,28 +248,28 @@ function AppContent() {
       </main>
 
       {!isCabinet && (
-        <footer className="bg-white py-12 sm:py-16 px-4 sm:px-6 border-t border-slate-200 text-center md:text-left mt-20 relative z-10">
+        <footer className="bg-white py-12 sm:py-16 px-4 sm:px-6 border-t border-neutral-200 text-center md:text-left mt-20 relative z-10">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <button
                 type="button"
-                className="font-bold text-2xl tracking-wide text-indigo-700 mb-4 cursor-pointer"
+                className="font-serif font-bold text-2xl tracking-wide text-neutral-900 mb-4 cursor-pointer"
                 onClick={handleLogoClick}
               >
-                Я уже <span className="text-indigo-500">все знаю</span>
+                Я уже <span className="text-brand-600">все знаю</span>
               </button>
               <p className="text-slate-500 text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
                 Премиальная подготовка к ЕГЭ и ОГЭ с юридической гарантией результата. Ваш путь к 100 баллам начинается здесь.
               </p>
             </div>
             <div className="flex flex-col space-y-3 text-sm text-slate-500">
-              <button type="button" className="hover:text-indigo-600 transition-colors">
+              <button type="button" className="hover:text-brand-600 transition-colors">
                 Политика конфиденциальности
               </button>
-              <button type="button" className="hover:text-indigo-600 transition-colors">
+              <button type="button" className="hover:text-brand-600 transition-colors">
                 Пользовательское соглашение
               </button>
-              <button type="button" className="hover:text-indigo-600 transition-colors">
+              <button type="button" className="hover:text-brand-600 transition-colors">
                 Лицензия на образовательную деятельность
               </button>
             </div>

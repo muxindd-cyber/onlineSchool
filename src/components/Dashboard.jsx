@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 // Данные рейтинга учеников
 const ratingData = [
-  { id: 1, name: 'Марина А.', score: '1 429 541', avatar: 'МА', color: '#6C63FF' },
+  { id: 1, name: 'Марина А.', score: '1 429 541', avatar: 'МА', color: '#E98E86' },
   { id: 2, name: 'Наталья К.', score: '1 326 500', avatar: 'НК', color: '#FF6584' },
   { id: 3, name: 'Ольга В.', score: '1 021 334', avatar: 'ОВ', color: '#43D399' },
   { id: 4, name: 'Ангелина Ц.', score: '987 210', avatar: 'АЦ', color: '#FFB347' },
@@ -62,10 +62,10 @@ const Dashboard = () => {
 
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">
-            С возвращением, <span className="text-yellow-300">{user?.name || 'ученик'}</span>! 👋
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-neutral-900 mb-1">
+            С возвращением, <span className="text-brand-600">{user?.name || 'ученик'}</span>! 👋
           </h2>
-          <p className="text-white/70 text-sm">До экзаменов осталось 142 дня. Продолжай в том же темпе!</p>
+          <p className="text-neutral-500 text-sm">До экзаменов осталось 142 дня. Продолжай в том же темпе!</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
@@ -78,10 +78,10 @@ const Dashboard = () => {
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-base font-bold text-slate-800">Май 2026</h3>
                 <div className="flex gap-1">
-                  <button type="button" className="p-1.5 hover:bg-indigo-50 rounded-lg transition-colors text-slate-400 hover:text-indigo-600">
+                  <button type="button" className="p-1.5 hover:bg-brand-50 rounded-lg transition-colors text-slate-400 hover:text-brand-600">
                     <ChevronLeft className="w-4 h-4" />
                   </button>
-                  <button type="button" className="p-1.5 hover:bg-indigo-50 rounded-lg transition-colors text-slate-400 hover:text-indigo-600">
+                  <button type="button" className="p-1.5 hover:bg-brand-50 rounded-lg transition-colors text-slate-400 hover:text-brand-600">
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -112,15 +112,15 @@ const Dashboard = () => {
                       key={day}
                       className={`relative flex items-center justify-center h-8 w-8 mx-auto rounded-full cursor-pointer transition-all text-xs font-semibold
                         ${isToday
-                          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-300'
+                          ? 'bg-brand-600 text-white shadow-md shadow-brand-300'
                           : isWeekend
                             ? 'text-red-400 hover:bg-red-50'
-                            : 'text-slate-700 hover:bg-indigo-50 hover:text-indigo-600'
+                            : 'text-slate-700 hover:bg-brand-50 hover:text-brand-600'
                         }`}
                     >
                       {day}
                       {hasEvent && !isToday && (
-                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-indigo-400 rounded-full" />
+                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-400 rounded-full" />
                       )}
                     </div>
                   );
@@ -131,15 +131,15 @@ const Dashboard = () => {
             {/* Stats cards */}
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-3xl bg-white p-5 shadow-md flex flex-col gap-2">
-                <div className="w-9 h-9 rounded-xl bg-yellow-50 flex items-center justify-center">
-                  <Trophy className="w-5 h-5 text-yellow-500" />
+                <div className="w-9 h-9 rounded-xl bg-brand-100 flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-brand-600" />
                 </div>
                 <div className="text-xl font-bold text-slate-900">53 455</div>
                 <div className="text-xs text-slate-500">Персональный рейтинг</div>
               </div>
               <div className="rounded-3xl bg-white p-5 shadow-md flex flex-col gap-2">
-                <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-indigo-600" />
+                <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-brand-600" />
                 </div>
                 <div className="text-xl font-bold text-slate-900">40 / 53</div>
                 <div className="text-xs text-slate-500">Пройдено уроков</div>
@@ -150,12 +150,12 @@ const Dashboard = () => {
             <div className="rounded-3xl bg-white p-5 shadow-md">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-sm font-bold text-slate-900">Рейтинг учеников</h3>
-                <button className="text-xs font-medium text-indigo-600 hover:underline">Все</button>
+                <button className="text-xs font-medium text-brand-600 hover:underline">Все</button>
               </div>
               <div className="space-y-3">
                 {ratingData.map((student, idx) => (
                   <div key={student.id} className="flex items-center gap-3">
-                    <div className={`w-5 text-center text-xs font-bold ${idx === 0 ? 'text-yellow-500' : 'text-slate-400'}`}>
+                    <div className={`w-5 text-center text-xs font-bold ${idx === 0 ? 'text-brand-600' : 'text-slate-400'}`}>
                       {idx + 1}
                     </div>
                     <div
@@ -168,7 +168,7 @@ const Dashboard = () => {
                       <div className="text-xs font-semibold text-slate-800 truncate">{student.name}</div>
                       <div className="text-[10px] text-slate-400">{student.score}</div>
                     </div>
-                    {idx === 0 && <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 shrink-0" />}
+                    {idx === 0 && <Star className="w-4 h-4 text-brand-500 fill-brand-500 shrink-0" />}
                   </div>
                 ))}
               </div>
@@ -179,9 +179,9 @@ const Dashboard = () => {
           <div className="md:col-span-8 flex flex-col gap-5">
 
             {/* Next lesson banner */}
-            <div className="rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 text-white p-6 relative overflow-hidden shadow-xl shadow-indigo-500/30">
+            <div className="rounded-3xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 text-white p-6 relative overflow-hidden shadow-xl shadow-brand-500/30">
               <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-violet-500/20 rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-brand-300/30 rounded-full blur-2xl" />
               <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
                 <div>
                   <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold mb-3">
@@ -194,7 +194,7 @@ const Dashboard = () => {
                   href="https://zoom.us"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 flex items-center justify-center gap-2 py-3 px-7 bg-white text-indigo-700 rounded-2xl font-bold hover:bg-slate-50 transition-all shadow-lg text-sm"
+                  className="shrink-0 flex items-center justify-center gap-2 py-3 px-7 bg-white text-brand-700 rounded-2xl font-bold hover:bg-slate-50 transition-all shadow-lg text-sm"
                 >
                   <Video className="w-4 h-4" />
                   Подключиться
@@ -206,33 +206,33 @@ const Dashboard = () => {
             <div className="rounded-3xl bg-white p-6 shadow-md">
               <div className="flex justify-between items-center mb-5">
                 <h3 className="text-base font-bold text-slate-900">Расписание уроков</h3>
-                <button className="text-xs font-medium text-indigo-600 hover:underline">Все уроки</button>
+                <button className="text-xs font-medium text-brand-600 hover:underline">Все уроки</button>
               </div>
               <div className="space-y-3">
                 {schedule.map((item, idx) => (
                   <div
                     key={idx}
                     className={`flex items-center gap-4 p-3 rounded-2xl transition-colors ${item.active
-                      ? 'bg-indigo-50 border border-indigo-200'
+                      ? 'bg-brand-50 border border-brand-200'
                       : 'hover:bg-slate-50 border border-transparent'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${item.active ? 'bg-indigo-600 shadow-md shadow-indigo-300' : 'bg-slate-100'}`}>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${item.active ? 'bg-brand-600 shadow-md shadow-brand-300' : 'bg-slate-100'}`}>
                       <Play className={`w-4 h-4 ${item.active ? 'text-white' : 'text-slate-500'}`} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className={`font-bold text-sm ${item.active ? 'text-indigo-600' : 'text-slate-800'}`}>
+                        <span className={`font-bold text-sm ${item.active ? 'text-brand-600' : 'text-slate-800'}`}>
                           {item.subject}
                         </span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.active ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.active ? 'bg-brand-100 text-brand-600' : 'bg-slate-100 text-slate-500'}`}>
                           {item.type}
                         </span>
                       </div>
                       <div className="text-xs text-slate-400 mt-0.5">{item.time} — сегодня</div>
                     </div>
                     {item.active && (
-                      <span className="shrink-0 text-[10px] bg-indigo-600 text-white px-2.5 py-1 rounded-full font-bold">
+                      <span className="shrink-0 text-[10px] bg-brand-600 text-white px-2.5 py-1 rounded-full font-bold">
                         Сейчас
                       </span>
                     )}
@@ -245,7 +245,7 @@ const Dashboard = () => {
             <div className="rounded-3xl bg-white p-6 shadow-md flex flex-col">
               <div className="flex justify-between items-center mb-5">
                 <h3 className="text-base font-bold text-slate-900">Домашние задания</h3>
-                <span className="bg-indigo-50 text-indigo-600 text-xs font-bold px-3 py-1 rounded-full">
+                <span className="bg-brand-50 text-brand-600 text-xs font-bold px-3 py-1 rounded-full">
                   {tasks.filter(t => !t.done).length} не выполнено
                 </span>
               </div>
@@ -256,13 +256,13 @@ const Dashboard = () => {
                     key={task.id}
                     className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all cursor-pointer ${task.done
                       ? 'bg-slate-50 border-slate-100'
-                      : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm'
+                      : 'bg-white border-slate-200 hover:border-brand-300 hover:shadow-sm'
                     }`}
                     onClick={() => toggleTask(task.id)}
                   >
                     <div className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 transition-all ${task.done
                       ? 'bg-emerald-500 border-emerald-500'
-                      : 'border-slate-300 hover:border-indigo-500'
+                      : 'border-slate-300 hover:border-brand-500'
                     }`}>
                       {task.done && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
                     </div>
@@ -279,9 +279,9 @@ const Dashboard = () => {
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
                   placeholder="Добавить задание..."
-                  className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 min-w-0"
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-200 min-w-0"
                 />
-                <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shrink-0">
+                <button type="submit" className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shrink-0">
                   +
                 </button>
               </form>

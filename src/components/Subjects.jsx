@@ -6,7 +6,7 @@ const subjectsData = [
     id: 'informatics',
     name: 'Информатика',
     image: 'https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&fit=crop&q=80&w=400',
-    color: '#6C63FF',
+    color: '#E98E86',
     tag: 'Урок',
     isUnlocked: true,
     topics: [
@@ -147,7 +147,7 @@ const Subjects = () => {
               onClick={() => handleSubjectClick(subject)}
               className={`flex flex-col text-left rounded-3xl border-2 transition-all relative overflow-hidden group
                 ${activeSubject.id === subject.id && subject.isUnlocked
-                  ? 'border-indigo-500 shadow-xl shadow-indigo-200 scale-[1.03] z-10'
+                  ? 'border-brand-500 shadow-xl shadow-brand-200 scale-[1.03] z-10'
                   : 'border-transparent shadow-md hover:shadow-lg hover:-translate-y-1'
                 } bg-white`}
             >
@@ -197,7 +197,7 @@ const Subjects = () => {
 
         {/* Active subject detail */}
         {activeSubject && activeSubject.isUnlocked && (
-          <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-xl border border-indigo-100">
+          <div className="rounded-3xl bg-white p-6 sm:p-8 shadow-xl border border-brand-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 mb-8 pb-6 border-b border-slate-100">
               <div className="flex items-start sm:items-center gap-4">
                 <div
@@ -224,7 +224,7 @@ const Subjects = () => {
                 href="https://zoom.us"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-colors shadow-md shrink-0 text-sm"
+                className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-colors shadow-md shrink-0 text-sm"
               >
                 <Video className="w-4 h-4" />
                 Подключиться к уроку
@@ -236,7 +236,7 @@ const Subjects = () => {
                 <h3 className="text-base font-bold text-slate-900 mb-4">Темы уроков</h3>
                 <div className="space-y-3">
                   {activeSubject.topics?.map((topic) => (
-                    <div key={topic.id} className={`flex items-start p-4 rounded-2xl border transition-colors ${topic.completed ? 'bg-slate-50 border-slate-100' : 'bg-white border-slate-200 hover:border-indigo-200'}`}>
+                    <div key={topic.id} className={`flex items-start p-4 rounded-2xl border transition-colors ${topic.completed ? 'bg-slate-50 border-slate-100' : 'bg-white border-slate-200 hover:border-brand-200'}`}>
                       <div className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 mt-0.5 shrink-0 ${topic.completed ? 'bg-emerald-500 text-white' : 'border-2 border-slate-300'}`}>
                         {topic.completed && <CheckCircle2 className="w-3 h-3" />}
                       </div>
@@ -245,7 +245,7 @@ const Subjects = () => {
                           {topic.title}
                         </p>
                         {!topic.completed && (
-                          <button type="button" className="text-xs text-indigo-600 font-bold mt-1 hover:underline flex items-center gap-1">
+                          <button type="button" className="text-xs text-brand-600 font-bold mt-1 hover:underline flex items-center gap-1">
                             <Play className="w-3 h-3" /> Начать урок
                           </button>
                         )}
@@ -262,8 +262,8 @@ const Subjects = () => {
                 <h3 className="text-base font-bold text-slate-900 mb-4">Пособия и материалы</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {activeSubject.materials?.map((material) => (
-                    <div key={material.id} className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all group bg-white cursor-pointer">
-                      <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <div key={material.id} className="p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all group bg-white cursor-pointer">
+                      <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-3 group-hover:bg-brand-600 group-hover:text-white transition-colors">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
@@ -297,7 +297,7 @@ const Subjects = () => {
               Урок «{selectedToUnlock?.name}» ещё не открыт. Хотите получить демо-доступ?
             </p>
             <div className="flex flex-col gap-3">
-              <button type="button" onClick={unlockSubject} className="w-full py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-colors shadow-md text-sm">
+              <button type="button" onClick={unlockSubject} className="w-full py-3 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-colors shadow-md text-sm">
                 Открыть демо-доступ бесплатно
               </button>
               <button type="button" onClick={() => setShowModal(false)} className="w-full py-3 text-slate-500 text-sm font-medium hover:bg-slate-50 rounded-2xl transition-colors">
