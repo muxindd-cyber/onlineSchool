@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const AuthModal = () => {
-  const { authModalOpen, closeAuth, login, postLoginPath } = useAuth();
+  const { authModalOpen, closeAuth, login, register, postLoginPath } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mode, setMode] = useState('login');
@@ -13,12 +13,14 @@ const AuthModal = () => {
   const [password, setPassword] = useState('');
   const [grade, setGrade] = useState('11');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   if (!authModalOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
     if (!email.trim() || !password.trim()) {
       setError('Заполните email и пароль');
       return;
@@ -27,13 +29,31 @@ const AuthModal = () => {
       setError('Укажите имя');
       return;
     }
-    login({
-      name: mode === 'register' ? name : email.split('@')[0],
-      email,
-      grade,
-    });
-    const target = location.state?.from || postLoginPath;
-    navigate(target, { replace: true });
+
+    setLoading(true);
+    try {
+      if (mode === 'register') {
+        await register({ name, email, password, grade });
+      } else {
+        await login({ email, password });
+      }
+      
+      const target = location.state?.from || postLoginPath;
+      navigate(target, { replace: true });
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Этот email уже зарегистрирован');
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        setError('Неверный email или пароль');
+      } else if (err.code === 'auth/weak-password') {
+        setError('Пароль слишком простой (минимум 6 символов)');
+      } else {
+        setError('Произошла ошибка. Попробуйте еще раз.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,7 +77,7 @@ const AuthModal = () => {
           {mode === 'login' ? 'Вход в кабинет' : 'Регистрация'}
         </h2>
         <p className="text-center text-slate-500 text-sm mb-6">
-          Демо-режим: данные сохраняются только в браузере
+          {mode === 'login' ? 'Войдите, чтобы продолжить обучение' : 'Создайте аккаунт для доступа к урокам'}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -73,6 +93,7 @@ const AuthModal = () => {
                 onChange={(e) => setName(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange"
                 placeholder="Артем"
+                disabled={loading}
               />
             </div>
           )}
@@ -89,6 +110,7 @@ const AuthModal = () => {
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange"
               placeholder="student@example.com"
               required
+              disabled={loading}
             />
           </div>
 
@@ -104,29 +126,33 @@ const AuthModal = () => {
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange"
               placeholder="••••••••"
               required
+              disabled={loading}
             />
           </div>
 
-          <div>
-            <label htmlFor="auth-grade" className="block text-sm font-medium text-slate-600 mb-1">
-              Класс
-            </label>
-            <select
-              id="auth-grade"
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange"
-            >
-              <option value="9">9 класс (ОГЭ)</option>
-              <option value="10">10 класс</option>
-              <option value="11">11 класс (ЕГЭ)</option>
-            </select>
-          </div>
+          {mode === 'register' && (
+            <div>
+              <label htmlFor="auth-grade" className="block text-sm font-medium text-slate-600 mb-1">
+                Класс
+              </label>
+              <select
+                id="auth-grade"
+                value={grade}
+                onChange={(e) => setGrade(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange"
+                disabled={loading}
+              >
+                <option value="9">9 класс (ОГЭ)</option>
+                <option value="10">10 класс</option>
+                <option value="11">11 класс (ЕГЭ)</option>
+              </select>
+            </div>
+          )}
 
           {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
-          <button type="submit" className="w-full btn-primary py-3 mt-2">
-            {mode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+          <button type="submit" disabled={loading} className="w-full btn-primary py-3 mt-2 disabled:opacity-50">
+            {loading ? 'Загрузка...' : (mode === 'login' ? 'Войти' : 'Зарегистрироваться')}
           </button>
         </form>
 
