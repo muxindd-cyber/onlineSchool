@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Video, ChevronLeft, ChevronRight, Trophy, BookOpen, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, BookOpen, Star, Clock, Video, Play, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+
+// Данные рейтинга учеников
+const ratingData = [
+  { id: 1, name: 'Марина А.', score: '1 429 541', avatar: 'МА', color: '#6C63FF' },
+  { id: 2, name: 'Наталья К.', score: '1 326 500', avatar: 'НК', color: '#FF6584' },
+  { id: 3, name: 'Ольга В.', score: '1 021 334', avatar: 'ОВ', color: '#43D399' },
+  { id: 4, name: 'Ангелина Ц.', score: '987 210', avatar: 'АЦ', color: '#FFB347' },
+];
+
+// Генератор дней мая 2026
+function getMayDays() {
+  // 1 мая 2026 — пятница (offset = 4 в системе ПН..ВС)
+  const offset = 4;
+  const total = 31;
+  const eventDays = [5, 12, 15, 19, 22, 26, 29];
+  return { offset, total, eventDays };
+}
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -9,7 +26,8 @@ const Dashboard = () => {
     if (saved) return JSON.parse(saved);
     return [
       { id: 1, text: 'Решить вариант №4 по профильной математике', done: false },
-      { id: 2, text: 'Написать эссе по обществознанию', done: true }
+      { id: 2, text: 'Написать эссе по обществознанию', done: true },
+      { id: 3, text: 'Повторить тему: Клетка и её органоиды (Биология)', done: false },
     ];
   });
   const [newTask, setNewTask] = useState('');
@@ -30,192 +48,243 @@ const Dashboard = () => {
   };
 
   const schedule = [
-    { time: '16:00', subject: 'Математика', type: 'Вебинар', active: false },
-    { time: '18:00', subject: 'Русский язык', type: 'Практикум', active: true },
-    { time: '20:00', subject: 'Обществознание', type: 'Тест', active: false },
+    { time: '16:00', subject: 'Информатика', type: 'Урок', active: false },
+    { time: '18:00', subject: 'Русский язык', type: 'Урок', active: true },
+    { time: '20:00', subject: 'Обществознание', type: 'Урок', active: false },
   ];
 
+  const { offset, total, eventDays } = getMayDays();
+  const today = 26;
+
   return (
-    <section className="py-6 sm:py-12 px-4 sm:px-6">
+    <section className="py-6 sm:py-10 px-4 sm:px-6 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6 sm:mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-              С возвращением, {user?.name || 'ученик'}! 👋
-            </h2>
-            <p className="text-white/80">Ваш прогресс и план на сегодня. До экзаменов осталось 142 дня.</p>
-          </div>
+
+        {/* Header */}
+        <div className="mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+            С возвращением, <span className="text-yellow-300">{user?.name || 'ученик'}</span>! 👋
+          </h2>
+          <p className="text-white/70 text-sm">До экзаменов осталось 142 дня. Продолжай в том же темпе!</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          
-          {/* Left Column: Calendar & Stats */}
-          <div className="md:col-span-4 flex flex-col gap-6">
-            
-            {/* Calendar Widget */}
-            <div className="bento-card !p-6 bg-slate-50 border-none">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-bold text-slate-900">Май 2026</h3>
-                <div className="flex gap-2">
-                  <button type="button" className="p-1 hover:bg-slate-200 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5 text-slate-500" /></button>
-                  <button type="button" className="p-1 hover:bg-slate-200 rounded-lg transition-colors"><ChevronRight className="w-5 h-5 text-slate-500" /></button>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+
+          {/* LEFT COLUMN */}
+          <div className="md:col-span-4 flex flex-col gap-5">
+
+            {/* Calendar */}
+            <div className="rounded-3xl bg-white p-5 shadow-lg">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-base font-bold text-slate-800">Май 2026</h3>
+                <div className="flex gap-1">
+                  <button type="button" className="p-1.5 hover:bg-indigo-50 rounded-lg transition-colors text-slate-400 hover:text-indigo-600">
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button type="button" className="p-1.5 hover:bg-indigo-50 rounded-lg transition-colors text-slate-400 hover:text-indigo-600">
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
-              <div className="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-semibold text-slate-400">
-                <div>ПН</div><div>ВТ</div><div>СР</div><div>ЧТ</div><div>ПТ</div><div className="text-red-400">СБ</div><div className="text-red-400">ВС</div>
+
+              {/* Weekday headers */}
+              <div className="grid grid-cols-7 mb-2 text-center">
+                {['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'].map((d, i) => (
+                  <div key={d} className={`text-[10px] font-bold pb-1 ${i >= 5 ? 'text-red-400' : 'text-slate-400'}`}>{d}</div>
+                ))}
               </div>
-              <div className="grid grid-cols-7 gap-2 text-center text-sm font-medium">
-                {/* Empty days for offset */}
-                <div className="p-2"></div><div className="p-2"></div><div className="p-2"></div><div className="p-2"></div>
-                <div className="p-2 hover:bg-white rounded-lg cursor-pointer">1</div>
-                <div className="p-2 hover:bg-white rounded-lg cursor-pointer text-slate-400">2</div>
-                <div className="p-2 hover:bg-white rounded-lg cursor-pointer text-slate-400">3</div>
-                
-                {/* Active month days */}
-                {[...Array(23)].map((_, i) => {
-                  const day = i + 4;
-                  const isToday = day === 26;
-                  const hasEvent = [15, 18, 22].includes(day);
+
+              {/* Days grid */}
+              <div className="grid grid-cols-7 gap-y-1 text-center text-sm">
+                {/* Offset empty cells */}
+                {Array.from({ length: offset }).map((_, i) => (
+                  <div key={`e-${i}`} />
+                ))}
+                {/* Days */}
+                {Array.from({ length: total }).map((_, i) => {
+                  const day = i + 1;
+                  const isToday = day === today;
+                  const hasEvent = eventDays.includes(day);
+                  const dayOfWeek = (offset + i) % 7;
+                  const isWeekend = dayOfWeek === 5 || dayOfWeek === 6;
                   return (
-                    <div 
-                      key={day} 
-                      className={`relative p-2 rounded-xl cursor-pointer transition-colors ${
-                        isToday ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30' : 'hover:bg-white text-slate-700'
-                      }`}
+                    <div
+                      key={day}
+                      className={`relative flex items-center justify-center h-8 w-8 mx-auto rounded-full cursor-pointer transition-all text-xs font-semibold
+                        ${isToday
+                          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-300'
+                          : isWeekend
+                            ? 'text-red-400 hover:bg-red-50'
+                            : 'text-slate-700 hover:bg-indigo-50 hover:text-indigo-600'
+                        }`}
                     >
                       {day}
-                      {hasEvent && !isToday && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-400 rounded-full"></div>}
+                      {hasEvent && !isToday && (
+                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-indigo-400 rounded-full" />
+                      )}
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Quick Stats Grid */}
+            {/* Stats cards */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bento-card !p-5 flex flex-col">
-                <div className="flex items-center gap-3 mb-2 text-yellow-500">
-                  <Trophy className="w-6 h-6" />
+              <div className="rounded-3xl bg-white p-5 shadow-md flex flex-col gap-2">
+                <div className="w-9 h-9 rounded-xl bg-yellow-50 flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-yellow-500" />
                 </div>
-                <div className="text-2xl font-bold text-slate-900">53 455</div>
+                <div className="text-xl font-bold text-slate-900">53 455</div>
                 <div className="text-xs text-slate-500">Персональный рейтинг</div>
               </div>
-              <div className="bento-card !p-5 flex flex-col">
-                <div className="flex items-center gap-3 mb-2 text-slate-700">
-                  <BookOpen className="w-6 h-6" />
+              <div className="rounded-3xl bg-white p-5 shadow-md flex flex-col gap-2">
+                <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-indigo-600" />
                 </div>
-                <div className="text-2xl font-bold text-slate-900">18/24</div>
+                <div className="text-xl font-bold text-slate-900">40 / 53</div>
                 <div className="text-xs text-slate-500">Пройдено уроков</div>
               </div>
             </div>
 
-            <div className="bento-card !p-6">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-sm font-bold text-slate-900">Общий прогресс</h3>
-                <span className="text-sm font-bold text-blue-600">75%</span>
+            {/* Rating block */}
+            <div className="rounded-3xl bg-white p-5 shadow-md">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-sm font-bold text-slate-900">Рейтинг учеников</h3>
+                <button className="text-xs font-medium text-indigo-600 hover:underline">Все</button>
               </div>
-              <div className="h-2 bg-slate-100 rounded-full overflow-hidden mt-3">
-                <div className="h-full w-3/4 bg-blue-600 rounded-full transition-all" />
+              <div className="space-y-3">
+                {ratingData.map((student, idx) => (
+                  <div key={student.id} className="flex items-center gap-3">
+                    <div className={`w-5 text-center text-xs font-bold ${idx === 0 ? 'text-yellow-500' : 'text-slate-400'}`}>
+                      {idx + 1}
+                    </div>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                      style={{ backgroundColor: student.color }}
+                    >
+                      {student.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-semibold text-slate-800 truncate">{student.name}</div>
+                      <div className="text-[10px] text-slate-400">{student.score}</div>
+                    </div>
+                    {idx === 0 && <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 shrink-0" />}
+                  </div>
+                ))}
               </div>
             </div>
-
           </div>
 
-          {/* Right Column: Timeline & Tasks */}
-          <div className="md:col-span-8 flex flex-col gap-6">
-            
-            {/* Next Lesson Card */}
-            <div className="bento-card border-none bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-              
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          {/* RIGHT COLUMN */}
+          <div className="md:col-span-8 flex flex-col gap-5">
+
+            {/* Next lesson banner */}
+            <div className="rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 text-white p-6 relative overflow-hidden shadow-xl shadow-indigo-500/30">
+              <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-violet-500/20 rounded-full blur-2xl" />
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
                 <div>
-                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
-                    <Clock className="w-3.5 h-3.5" /> 18:00
+                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold mb-3">
+                    <Clock className="w-3.5 h-3.5" /> Следующий урок в 18:00
                   </div>
-                  <h3 className="text-3xl font-bold mb-2">Русский язык</h3>
-                  <p className="text-white/80">Тема: Разбор задания №27. Идеальное сочинение.</p>
+                  <h3 className="text-2xl font-bold mb-1">Русский язык</h3>
+                  <p className="text-white/75 text-sm">Тема: Разбор задания №27. Идеальное сочинение.</p>
                 </div>
-                
                 <a
                   href="https://zoom.us"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 flex items-center justify-center py-4 px-8 bg-white text-blue-700 rounded-2xl font-bold hover:bg-slate-50 transition-colors shadow-xl"
+                  className="shrink-0 flex items-center justify-center gap-2 py-3 px-7 bg-white text-indigo-700 rounded-2xl font-bold hover:bg-slate-50 transition-all shadow-lg text-sm"
                 >
-                  <Video className="w-5 h-5 mr-2" />
+                  <Video className="w-4 h-4" />
                   Подключиться
                 </a>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Schedule Timeline */}
-              <div className="bento-card flex flex-col">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-slate-900">Расписание</h3>
-                  <button className="text-sm font-medium text-blue-600 hover:underline">Все</button>
-                </div>
-                
-                <div className="space-y-4">
-                  {schedule.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
-                      <div className="w-14 text-center shrink-0">
-                        <div className={`text-sm font-bold ${item.active ? 'text-blue-600' : 'text-slate-900'}`}>{item.time}</div>
-                      </div>
-                      <div className={`w-1 h-12 rounded-full ${item.active ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
-                      <div>
-                        <div className="font-bold text-slate-900">{item.subject}</div>
-                        <div className="text-sm text-slate-500">{item.type}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Schedule */}
+            <div className="rounded-3xl bg-white p-6 shadow-md">
+              <div className="flex justify-between items-center mb-5">
+                <h3 className="text-base font-bold text-slate-900">Расписание уроков</h3>
+                <button className="text-xs font-medium text-indigo-600 hover:underline">Все уроки</button>
               </div>
-
-              {/* Homework Block */}
-              <div className="bento-card flex-grow flex flex-col">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-slate-900">Задачи</h3>
-                  <span className="bg-blue-50 text-blue-600 text-xs font-bold px-3 py-1 rounded-full">
-                    {tasks.filter(t => !t.done).length}
-                  </span>
-                </div>
-
-                {/* Task list */}
-                <div className="space-y-3 mb-6 overflow-y-auto max-h-[250px] pr-2 custom-scrollbar">
-                  {tasks.map(task => (
-                    <div 
-                      key={task.id} 
-                      className={`flex items-start p-4 rounded-2xl border transition-all ${task.done ? 'bg-slate-50 border-slate-100' : 'bg-white border-slate-200 shadow-sm hover:border-blue-300'}`}
-                    >
-                      <button 
-                        onClick={() => toggleTask(task.id)}
-                        className={`shrink-0 w-6 h-6 rounded-md border-2 flex items-center justify-center mr-4 mt-0.5 transition-colors ${task.done ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 text-transparent hover:border-blue-600'}`}
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
-                      </button>
-                      <span className={`text-sm ${task.done ? 'text-slate-400 line-through' : 'text-slate-800 font-medium'}`}>
-                        {task.text}
+              <div className="space-y-3">
+                {schedule.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex items-center gap-4 p-3 rounded-2xl transition-colors ${item.active
+                      ? 'bg-indigo-50 border border-indigo-200'
+                      : 'hover:bg-slate-50 border border-transparent'
+                    }`}
+                  >
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${item.active ? 'bg-indigo-600 shadow-md shadow-indigo-300' : 'bg-slate-100'}`}>
+                      <Play className={`w-4 h-4 ${item.active ? 'text-white' : 'text-slate-500'}`} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`font-bold text-sm ${item.active ? 'text-indigo-600' : 'text-slate-800'}`}>
+                          {item.subject}
+                        </span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.active ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}>
+                          {item.type}
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-400 mt-0.5">{item.time} — сегодня</div>
+                    </div>
+                    {item.active && (
+                      <span className="shrink-0 text-[10px] bg-indigo-600 text-white px-2.5 py-1 rounded-full font-bold">
+                        Сейчас
                       </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Add task input */}
-                <form onSubmit={addTask} className="mt-auto pt-4 flex gap-2">
-                  <input 
-                    type="text" 
-                    value={newTask}
-                    onChange={(e) => setNewTask(e.target.value)}
-                    placeholder="Новая задача..."
-                    className="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 min-w-0"
-                  />
-                  <button type="submit" className="bg-slate-900 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors shrink-0">
-                    +
-                  </button>
-                </form>
+                    )}
+                  </div>
+                ))}
               </div>
+            </div>
+
+            {/* Tasks */}
+            <div className="rounded-3xl bg-white p-6 shadow-md flex flex-col">
+              <div className="flex justify-between items-center mb-5">
+                <h3 className="text-base font-bold text-slate-900">Домашние задания</h3>
+                <span className="bg-indigo-50 text-indigo-600 text-xs font-bold px-3 py-1 rounded-full">
+                  {tasks.filter(t => !t.done).length} не выполнено
+                </span>
+              </div>
+
+              <div className="space-y-2.5 mb-5 overflow-y-auto max-h-[220px] pr-1 custom-scrollbar">
+                {tasks.map(task => (
+                  <div
+                    key={task.id}
+                    className={`flex items-start gap-3 p-3.5 rounded-2xl border transition-all cursor-pointer ${task.done
+                      ? 'bg-slate-50 border-slate-100'
+                      : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm'
+                    }`}
+                    onClick={() => toggleTask(task.id)}
+                  >
+                    <div className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 transition-all ${task.done
+                      ? 'bg-emerald-500 border-emerald-500'
+                      : 'border-slate-300 hover:border-indigo-500'
+                    }`}>
+                      {task.done && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                    </div>
+                    <span className={`text-sm leading-snug ${task.done ? 'text-slate-400 line-through' : 'text-slate-800 font-medium'}`}>
+                      {task.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <form onSubmit={addTask} className="mt-auto flex gap-2">
+                <input
+                  type="text"
+                  value={newTask}
+                  onChange={(e) => setNewTask(e.target.value)}
+                  placeholder="Добавить задание..."
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 min-w-0"
+                />
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shrink-0">
+                  +
+                </button>
+              </form>
             </div>
 
           </div>
