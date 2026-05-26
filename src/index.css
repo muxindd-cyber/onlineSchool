@@ -3,8 +3,27 @@
 @theme {
   /* Make Tailwind `indigo/violet` match the requested light reddish palette.
      This ensures old components still recolor correctly even if markup hasn't changed. */
-  --color-indigo: #e98e86;
-  --color-violet: #d46a62;
+  --color-indigo-50: #fff8f7;
+  --color-indigo-100: #fce8e6;
+  --color-indigo-200: #f6c4be;
+  --color-indigo-300: #f0a8a0;
+  --color-indigo-400: #e98e86;
+  --color-indigo-500: #e07a72;
+  --color-indigo-600: #d46a62;
+  --color-indigo-700: #c25a52;
+  --color-indigo-800: #a04a44;
+  --color-indigo-900: #7a3733;
+
+  --color-violet-50: #fff8f7;
+  --color-violet-100: #fce8e6;
+  --color-violet-200: #f6c4be;
+  --color-violet-300: #f0a8a0;
+  --color-violet-400: #e98e86;
+  --color-violet-500: #e07a72;
+  --color-violet-600: #d46a62;
+  --color-violet-700: #c25a52;
+  --color-violet-800: #a04a44;
+  --color-violet-900: #7a3733;
 
   /* TheArt-inspired palette: light reddish cream instead of yellow */
   --color-brand-50: #fff8f7;
