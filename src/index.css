@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @theme {
+  /* Make Tailwind `indigo/violet` match the requested light reddish palette.
+     This ensures old components still recolor correctly even if markup hasn't changed. */
+  --color-indigo: #e98e86;
+  --color-violet: #d46a62;
+
   /* TheArt-inspired palette: light reddish cream instead of yellow */
   --color-brand-50: #fff8f7;
   --color-brand-100: #fce8e6;
