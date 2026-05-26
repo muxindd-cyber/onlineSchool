@@ -35,6 +35,15 @@ jobs:
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
 
+      # GitHub Pages (and many default setups) look for `index.html`.
+      # Vite here outputs `index.src.html`, so we create an `index.html` copy
+      # to ensure the deployed page references the freshly built assets.
+      - name: Prepare index.html
+        run: |
+          if [ -f dist/index.src.html ]; then
+            cp dist/index.src.html dist/index.html
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
